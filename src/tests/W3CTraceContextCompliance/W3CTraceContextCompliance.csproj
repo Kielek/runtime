@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net11.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseAppHost>false</UseAppHost>
+    <DiagnosticSourcePath Condition="'$(DiagnosticSourcePath)' == ''">$(MSBuildThisFileDirectory)..\..\..\artifacts\bin\System.Diagnostics.DiagnosticSource\$(Configuration)\$(TargetFramework)\System.Diagnostics.DiagnosticSource.dll</DiagnosticSourcePath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Diagnostics.DiagnosticSource">
+      <HintPath>$(DiagnosticSourcePath)</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="ValidateDiagnosticSourcePath" BeforeTargets="ResolveReferences">
+    <Error Condition="!Exists('$(DiagnosticSourcePath)')" Text="System.Diagnostics.DiagnosticSource.dll was not found at '$(DiagnosticSourcePath)'. Build src/libraries/System.Diagnostics.DiagnosticSource first or pass /p:DiagnosticSourcePath=..." />
+  </Target>
+</Project>
